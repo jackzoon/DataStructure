@@ -26,6 +26,19 @@ public class Main {
         return second;
     }
 
+    public static int fib3(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        int first = 0;
+        int second = 1;
+        while (n-- > 1) {
+            second += first;
+            first = second - first;
+        }
+        return second;
+    }
+
     public static void main(String[] args) {
         int n = 45;
         TimeTool.check("fib1", new TimeTool.Task() {
