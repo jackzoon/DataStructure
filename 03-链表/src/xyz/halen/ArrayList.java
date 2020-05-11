@@ -3,13 +3,12 @@ package xyz.halen;
 /**
  * Created By Halen 2020/5/9 17:02
  */
-public class ArrayList<E> {
+public class ArrayList<E> extends AbstractList<E>{
 
     private int size;// 元素的数量
     private E[] elements;// 所有的元素
 
     private static final int DEFAULT_CAPACITY = 10;
-    private static final int ELEMENT_NOT_FOUND = -1;
 
     public ArrayList(int capacity) {
         capacity = (capacity < DEFAULT_CAPACITY) ? DEFAULT_CAPACITY : capacity;
@@ -26,26 +25,6 @@ public class ArrayList<E> {
             elements[i] = null;
         }
         size = 0;
-    }
-
-    // 元素的数量
-    public int size() {
-        return size;
-    }
-
-    // 是否为空
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    // 是否包含某个元素
-    public boolean contains(E element) {
-        return indexOf(element) != ELEMENT_NOT_FOUND;
-    }
-
-    // 添加元素到尾部
-    public void add(E element) {
-        add(size, element);
     }
 
     // 获取index位置的元素
@@ -123,22 +102,6 @@ public class ArrayList<E> {
         }
         elements = newElements;
         System.out.println("扩容: " + oldCapacity + "_" + newCapacity);
-    }
-
-    private void outOfBounds(int index) {
-        throw new IndexOutOfBoundsException("Index:" + index + ", Size:" + size);
-    }
-
-    private void rangeCheck(int index) {
-        if (index < 0 || index >= size) {
-            outOfBounds(index);
-        }
-    }
-
-    private void rangeCheckForAdd(int index) {
-        if (index < 0 || index > size) {
-            outOfBounds(index);
-        }
     }
 
     @Override
