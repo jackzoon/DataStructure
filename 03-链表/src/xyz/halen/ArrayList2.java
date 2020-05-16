@@ -25,6 +25,9 @@ public class ArrayList2<E> extends AbstractList<E>{
             elements[i] = null;
         }
         size = 0;
+        if (elements != null && elements.length > DEFAULT_CAPACITY) {
+            elements = (E[]) new Object[DEFAULT_CAPACITY];
+        }
     }
 
     // 获取index位置的元素

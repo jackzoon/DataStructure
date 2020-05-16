@@ -1,18 +1,47 @@
-package xyz.halen;
+package xyz.halen.circle;
+
+import xyz.halen.AbstractList;
 
 /**
  * Created By Halen 2020/5/11 14:06
  */
-public class LinkedList<E> extends AbstractList<E> {
+public class CircleLinkedList<E> extends AbstractList<E> {
 
     private Node<E> first;
     private Node<E> last;
+    private Node<E> current;
 
     @Override
     public void clear() {
         size = 0;
         first = null;
         last = null;
+    }
+
+    public void reset() {
+        current = first;
+    }
+
+    public E next() {
+        if (current == null) {
+            return null;
+        }
+        current = current.next;
+        return current.element;
+    }
+
+    public E remove() {
+        if (current == null) {
+            return null;
+        }
+        Node<E> next = current.next;
+        E element = remove(current);
+        if (size == 0) {
+            current = null;
+        } else {
+            current = next;
+        }
+        return element;
     }
 
     @Override
@@ -33,21 +62,23 @@ public class LinkedList<E> extends AbstractList<E> {
         rangeCheckForAdd(index);
         if (index == size) {// 往最后面添加元素
             Node<E> oldLast = last;
-            last = new Node<>(oldLast, e, null);
+            last = new Node<>(oldLast, e, first);
             if (oldLast == null) {// 链表添加的第一个元素
                 first = last;
+                first.next = first;
+                first.prev= first;
             } else {
                 oldLast.next = last;
+                first.prev = last;
             }
         } else {
             Node<E> next = node(index);
             Node<E> prev = next.prev;
             Node<E> node = new Node<>(prev, e, next);
             next.prev = node;
-            if (prev == null) {
+            prev.next = node;
+            if (index == 0) {
                 first = node;
-            } else {
-                prev.next = node;
             }
         }
         size++;
@@ -56,18 +87,24 @@ public class LinkedList<E> extends AbstractList<E> {
     @Override
     public E remove(int index) {
         rangeCheck(index);
-        Node<E> node = node(index);
-        Node<E> prev = node.prev;
-        Node<E> next = node.next;
-        if (prev == null) { // index == 0
-            first = next;
+        return remove(node(index));
+    }
+
+    private E remove(Node<E> node) {
+        if (size == 1) {
+            first = null;
+            last = null;
         } else {
+            Node<E> prev = node.prev;
+            Node<E> next = node.next;
             prev.next = next;
-        }
-        if (next == null) { // index == size-1
-            last = prev;
-        } else {
             next.prev = prev;
+            if (node == first) { // index == 0
+                first = next;
+            }
+            if (node == last) { // index == size-1
+                last = prev;
+            }
         }
         size--;
         return node.element;
